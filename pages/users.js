@@ -1,17 +1,13 @@
-import {useState, useEffect} from 'react';
 import Link from 'next/link';
+import A from '../components/A';
+import styles from '../styles/users.module.scss';
+import MainContainer from '../components/MainContainer';
 
-const Users = () => {
-  const [users, setUsers] = useState([
-    {id: 1, name: 'Evgeniy'},
-    {id: 2, name: 'Elena'},
-  ]);
-
+const Users = ({users}) => {
   return (
-    <div>
-      <Link href="/">
-        <a>Главная</a>
-      </Link>
+    <MainContainer keywords={'users next.js'}>
+      {/* <A href="/" text="Главная" /> */}
+
       <h1>Список пользователей</h1>
       <ul>
         {users.map((user) => (
@@ -22,8 +18,17 @@ const Users = () => {
           </li>
         ))}
       </ul>
-    </div>
+    </MainContainer>
   );
 };
 
 export default Users;
+
+export async function getStaticProps(context) {
+  const response = await fetch(`https://jsonplaceholder.typicode.com/users`);
+  const users = await response.json();
+
+  return {
+    props: {users}, // will be passed to the page component as props
+  };
+}
